@@ -5,58 +5,42 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     utils.url = "github:numtide/flake-utils";
 
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.utils.follows = "utils";
-    };
+    deploy-rs.url = "github:serokell/deploy-rs";
+    deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
+    deploy-rs.inputs.utils.follows = "utils";
 
-    secrets = {
-      url = "git+ssh://git@github.com/nerosnm/secrets.git?ref=main";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
-    };
+    secrets.url = "git+ssh://git@github.com/nerosnm/secrets.git?ref=main";
+    secrets.inputs.nixpkgs.follows = "nixpkgs";
+    secrets.inputs.flake-utils.follows = "utils";
 
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
-    };
+    rust-overlay.url = "github:oxalica/rust-overlay";
+    rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    rust-overlay.inputs.flake-utils.follows = "utils";
 
-    hatysa = {
-      url = "github:nerosnm/hatysa/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
+    hatysa.url = "github:nerosnm/hatysa/master";
+    hatysa.inputs.nixpkgs.follows = "nixpkgs";
+    hatysa.inputs.flake-utils.follows = "utils";
+    hatysa.inputs.rust-overlay.follows = "rust-overlay";
 
-    oxbow = {
-      url = "github:nerosnm/oxbow/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
+    oxbow.url = "github:nerosnm/oxbow/main";
+    oxbow.inputs.nixpkgs.follows = "nixpkgs";
+    oxbow.inputs.flake-utils.follows = "utils";
+    oxbow.inputs.rust-overlay.follows = "rust-overlay";
 
-    pomocop = {
-      url = "github:nerosnm/pomocop/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
+    pomocop.url = "github:nerosnm/pomocop/main";
+    pomocop.inputs.nixpkgs.follows = "nixpkgs";
+    pomocop.inputs.flake-utils.follows = "utils";
+    pomocop.inputs.rust-overlay.follows = "rust-overlay";
 
-    cacti-dev = {
-      url = "github:nerosnm/cacti.dev/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
+    cacti-dev.url = "github:nerosnm/cacti.dev/main";
+    cacti-dev.inputs.nixpkgs.follows = "nixpkgs";
+    cacti-dev.inputs.flake-utils.follows = "utils";
+    cacti-dev.inputs.rust-overlay.follows = "rust-overlay";
 
-    neros-dev = {
-      url = "git+ssh://git@github.com/nerosnm/neros.dev.git?ref=main";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
+    neros-dev.url = "git+ssh://git@github.com/nerosnm/neros.dev.git?ref=main";
+    neros-dev.inputs.nixpkgs.follows = "nixpkgs";
+    neros-dev.inputs.flake-utils.follows = "utils";
+    neros-dev.inputs.rust-overlay.follows = "rust-overlay";
   };
 
   outputs =
@@ -71,7 +55,7 @@
     let
       inherit (builtins) concatMap listToAttrs mapAttrs;
       inherit (nixpkgs.lib) attrNames getAttr nixosSystem;
-      inherit (utils.lib) eachDefaultSystem;
+      inherit (utils.lib) eachSystem eachDefaultSystem system;
 
       # Turn an attr set into a list by getting the value of each key. Honestly, 
       # why isn't this in nixpkgs.lib? Or am I missing something?
@@ -87,7 +71,9 @@
             cacti-dev = inputs.cacti-dev.defaultPackage.${system};
             hatysa = inputs.hatysa.packages.${system}.default;
             neros-dev = inputs.neros-dev.packages.${system}.neros-dev;
-            neros-dev-wip = inputs.neros-dev.packages.${system}.neros-dev-wip;
+            neros-dev-content = inputs.neros-dev.packages.${system}.content;
+            neros-dev-static = inputs.neros-dev.packages.${system}.static;
+            neros-dev-stylesheet = inputs.neros-dev.packages.${system}.stylesheet;
             oxbow = inputs.oxbow.defaultPackage.${system};
             oxbow-cacti-dev = inputs.oxbow.packages.${system}.oxbow-cacti-dev;
             pomocop = inputs.pomocop.defaultPackage.${system};
@@ -96,7 +82,7 @@
       };
 
       secret = {
-        inherit (secrets.nixosModules.secret) grafana hatysa oxbow pomocop tailscale;
+        inherit (secrets.nixosModules.secret) grafana hatysa oxbow pomocop tailscale neros-dev;
       };
 
       service = {
@@ -189,7 +175,6 @@
               # Websites
               cacti-dev.enable = true;
               neros-dev.enable = true;
-              neros-dev.wip.enable = true;
 
               # Custom software
               hatysa.enable = true;
@@ -330,7 +315,6 @@
     } //
     eachDefaultSystem (system:
     let
-      inherit (deploy-rs.lib.${system}) deployChecks;
       pkgs = pkgsFor system;
     in
     {
@@ -341,7 +325,13 @@
           nixpkgs-fmt
         ];
       };
-
+    }) //
+    eachSystem (with system; [ x86_64-linux ]) (system:
+    let
+      pkgs = pkgsFor system;
+      inherit (deploy-rs.lib.${system}) deployChecks;
+    in
+    {
       checks = {
         format = pkgs.runCommand "check-format" { } ''
           ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt --check ${./.}

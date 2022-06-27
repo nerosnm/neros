@@ -112,6 +112,27 @@
     },
     "naersk_2": {
       "inputs": {
+        "nixpkgs": [
+          "neros-dev",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1655042882,
+        "narHash": "sha256-9BX8Fuez5YJlN7cdPO63InoyBy7dm3VlJkkmTt6fS1A=",
+        "owner": "nix-community",
+        "repo": "naersk",
+        "rev": "cddffb5aa211f50c4b8750adbec0bbbdfb26bb9f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "naersk",
+        "type": "github"
+      }
+    },
+    "naersk_3": {
+      "inputs": {
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
@@ -133,16 +154,20 @@
         "flake-utils": [
           "utils"
         ],
+        "naersk": "naersk_2",
         "nixpkgs": [
           "nixpkgs"
+        ],
+        "rust-overlay": [
+          "rust-overlay"
         ]
       },
       "locked": {
-        "lastModified": 1649161353,
-        "narHash": "sha256-WDP4bzi8bSbNA9raskk+voFLtC+5aSvdDlqBh2WSzgM=",
+        "lastModified": 1656321224,
+        "narHash": "sha256-YaeTdzpzEgQxFY9xC5noxdG3I8PYa58aBJOEYMk+sPA=",
         "ref": "main",
-        "rev": "94326c8ea25c30cfc178d158f60c794dfc90dc9e",
-        "revCount": 69,
+        "rev": "952e2303fd25c10ba86dfa3177bca65db3b9bd5e",
+        "revCount": 38,
         "type": "git",
         "url": "ssh://git@github.com/nerosnm/neros.dev.git"
       },
@@ -166,11 +191,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1653738054,
-        "narHash": "sha256-IaR8iLN4Ms3f5EjU1CJkXSc49ZzyS5qv03DtVAti6/s=",
+        "lastModified": 1655567057,
+        "narHash": "sha256-Cc5hQSMsTzOHmZnYm8OSJ5RNUp22bd5NADWLHorULWQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "17b62c338f2a0862a58bb6951556beecd98ccda9",
+        "rev": "e0a42267f73ea52adc061a64650fddc59906fc99",
         "type": "github"
       },
       "original": {
@@ -198,7 +223,7 @@
         "flake-utils": [
           "utils"
         ],
-        "naersk": "naersk_2",
+        "naersk": "naersk_3",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -272,11 +297,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1654569639,
-        "narHash": "sha256-jR1AaxzxtlW+2U7KUN/q+n0H7OY8ZXfueOShbBpNjAc=",
+        "lastModified": 1655952523,
+        "narHash": "sha256-jq+NsrG6ZAjluxJjxuP2nV6KRxGsaE4RoQ+8HqgmpLo=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "e8fe203926215842061585a788c5661a8e0426ed",
+        "rev": "2182aac936971fcefbf08a1a0c5ef4c81d5e6bdb",
         "type": "github"
       },
       "original": {
@@ -295,11 +320,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1653821969,
-        "narHash": "sha256-hBAlAn+wJ9B75c+pkCLyPVNBT1hpdi0o3PWnwQ44jAY=",
+        "lastModified": 1656007320,
+        "narHash": "sha256-RFvumHI6mnV4cq+8PY04MHXK4+TXiL3lms7KykQAJss=",
         "ref": "main",
-        "rev": "18a156266310d864d41c7d79720b2e6c1d200a6f",
-        "revCount": 30,
+        "rev": "bf4632f686bb268dc79d3244f478c0246bde3a05",
+        "revCount": 31,
         "type": "git",
         "url": "ssh://git@github.com/nerosnm/secrets.git"
       },
@@ -311,11 +336,11 @@
     },
     "utils": {
       "locked": {
-        "lastModified": 1652776076,
-        "narHash": "sha256-gzTw/v1vj4dOVbpBSJX4J0DwUR6LIyXo7/SuuTJp1kM=",
+        "lastModified": 1653893745,
+        "narHash": "sha256-0jntwV3Z8//YwuOjzhV2sgJJPt+HY6KhU7VZUL0fKZQ=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "04c1b180862888302ddfb2e3ad9eaa63afc60cf8",
+        "rev": "1ed9fb1935d260de5fe1c2f7ee0ebaae17ed2fa1",
         "type": "github"
       },
       "original": {
