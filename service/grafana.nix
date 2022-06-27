@@ -8,6 +8,7 @@ with lib;
 let
   cfg = config.cacti.services.grafana;
   promcfg = config.cacti.services.prometheus;
+  lokicfg = config.cacti.services.loki;
 
   secret = config.nerosnm.secrets.grafana;
 
@@ -59,6 +60,10 @@ in
           jsonData = {
             scrape_interval = "15s";
           };
+        } ++ optional lokicfg.enable {
+          name = "Loki";
+          type = "loki";
+          url = "http://localhost:${toString lokicfg.port}";
         };
       };
     };

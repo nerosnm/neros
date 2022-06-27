@@ -103,6 +103,7 @@
 
         # Monitoring
         grafana = import ./service/grafana.nix;
+        loki = import ./service/loki.nix;
         prometheus = import ./service/prometheus.nix;
 
         # Networking
@@ -183,6 +184,7 @@
 
               # Monitoring
               grafana.enable = true;
+              loki.enable = true;
               prometheus = {
                 enable = true;
                 nodeExporter.enable = true;
