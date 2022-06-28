@@ -43,8 +43,6 @@ in
     services.prometheus = {
       inherit (cfg) enable port;
 
-      webExternalUrl = "https://prometheus.cacti.dev/";
-
       exporters = {
         node = {
           inherit (cfg.nodeExporter) enable port;
@@ -112,21 +110,5 @@ in
         }
       ];
     };
-
-    services.nginx.virtualHosts = {
-      "prometheus.cacti.dev" = {
-        forceSSL = true;
-        useACMEHost = "cacti.dev";
-
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString cfg.port}";
-          proxyWebsockets = true;
-        };
-      };
-    };
-
-    security.acme.certs."cacti.dev".extraDomainNames = [
-      "prometheus.cacti.dev"
-    ];
   };
 }

@@ -9,6 +9,7 @@ let
   cfg = config.cacti.services.grafana;
   promcfg = config.cacti.services.prometheus;
   lokicfg = config.cacti.services.loki;
+  tempocfg = config.cacti.services.tempo;
 
   secret = config.nerosnm.secrets.grafana;
 
@@ -64,6 +65,33 @@ in
           name = "Loki";
           type = "loki";
           url = "http://localhost:${toString lokicfg.port}";
+          jsonData = {
+            derivedFields = [
+              {
+                datasourceUid = "Tempo";
+                matcherRegex = "trace_id=(\\w+)";
+                name = "Trace ID";
+                url = "$${__value.raw}";
+              }
+            ];
+          };
+        } ++ optional tempocfg.enable {
+          name = "Tempo";
+          type = "tempo";
+          url = "http://localhost:${toString tempocfg.port}";
+          jsonData = {
+            tracesToLogs = {
+              datasourceUid = "Loki";
+              mappedTags = [
+                {
+                  key = "service.name";
+                  value = "service";
+                }
+              ];
+              mapTagNamesEnabled = true;
+              filterByTraceID = true;
+            };
+          };
         };
       };
     };

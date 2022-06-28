@@ -145,36 +145,5 @@ in
         }];
       };
     };
-
-    security.acme.certs."cacti.dev".extraDomainNames = [
-      "loki.cacti.dev"
-      "promtail.cacti.dev"
-    ];
-
-    services.nginx = {
-      enable = true;
-      recommendedProxySettings = true;
-
-      virtualHosts = {
-        "loki.cacti.dev" = {
-          forceSSL = true;
-          useACMEHost = "cacti.dev";
-
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:${toString cfg.port}";
-            proxyWebsockets = true;
-          };
-        };
-        "promtail.cacti.dev" = {
-          forceSSL = true;
-          useACMEHost = "cacti.dev";
-
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:${toString cfg.promtail.port}";
-            proxyWebsockets = true;
-          };
-        };
-      };
-    };
   };
 }

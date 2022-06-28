@@ -76,7 +76,8 @@ in
       script = ''
         export PORT=${toString cfg.port}
         export RUST_LOG="neros_dev=info"
-        export HONEYCOMB_API_KEY=$(cat ./honeycomb-api-key)
+        export OTLP_ENDPOINT="https://taygeta:4317"
+        export LOKI_ENDPOINT="http://taygeta:9003"
         export CONTENT_PATH=${pkgs.neros-dev-content}
         export STATIC_PATH=${pkgs.neros-dev-static}
         export STYLESHEET_PATH=${pkgs.neros-dev-stylesheet}/style.css

@@ -77,6 +77,8 @@
             oxbow = inputs.oxbow.defaultPackage.${system};
             oxbow-cacti-dev = inputs.oxbow.packages.${system}.oxbow-cacti-dev;
             pomocop = inputs.pomocop.defaultPackage.${system};
+
+            tempo = final.callPackage ./pkgs/tempo { };
           })
         ];
       };
@@ -105,6 +107,7 @@
         grafana = import ./service/grafana.nix;
         loki = import ./service/loki.nix;
         prometheus = import ./service/prometheus.nix;
+        tempo = import ./service/tempo.nix;
 
         # Networking
         tailscale = import ./service/tailscale.nix;
@@ -198,6 +201,7 @@
               # Networking
               tailscale = {
                 enable = true;
+                trustInterface = true;
                 authKey = config.nerosnm.secrets.tailscale.taygeta;
               };
             };
