@@ -111,6 +111,8 @@
       };
 
       trait = {
+        acme = import ./trait/acme.nix;
+
         # Sets up a group and homedir parent for services that need a user with 
         # a home in /srv/cacti.
         cacti = import ./trait/cacti.nix;
@@ -170,6 +172,8 @@
           config.cacti = {
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKnAKrUqhfVaoAbhAJutnAsXwrKfPfmBPI19AuYkSbBY root@taygeta";
 
+            acme.enable = true;
+
             services = {
               enable = true;
 
@@ -189,6 +193,7 @@
                 enable = true;
                 nodeExporter.enable = true;
               };
+              tempo.enable = true;
 
               # Networking
               tailscale = {
@@ -202,6 +207,8 @@
         marsic = { config, ... }: {
           config.cacti = {
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFv+FfTb6+8dFM2NSubKP6O6xKQg69tZqjBRNBlCSRXg root@nixos";
+
+            acme.enable = true;
 
             services = {
               enable = true;
@@ -230,6 +237,8 @@
           config.cacti = {
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHS3fcwk5DX94CnOKg0nJrYaQJNKHEkssGocGjiII5Zq root@nixos";
 
+            acme.enable = true;
+
             services = {
               enable = true;
 
@@ -256,6 +265,8 @@
           config.cacti = {
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH3+XtOM9xdAtGw7m/uhvIpqR2S4XZosxXK3laL1Djkx root@nixos";
 
+            acme.enable = true;
+
             services = {
               enable = true;
 
@@ -281,6 +292,8 @@
         tarazed = { config, ... }: {
           config.cacti = {
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPD6d0Ydn2bs6XfSUuB8RWfaqfKw6mIgjHNdZPYXjX21 root@nixos";
+
+            acme.enable = true;
 
             services = {
               enable = true;

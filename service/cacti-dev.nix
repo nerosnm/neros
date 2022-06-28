@@ -19,14 +19,9 @@ in
     # Expose the HTTP and HTTPS ports to the public internet
     networking.firewall.allowedTCPPorts = [ 80 443 ];
 
-    security.acme = {
-      acceptTerms = true;
-      defaults.email = "soren@neros.dev";
-
-      certs."cacti.dev".extraDomainNames = [
-        "oxbow.cacti.dev"
-      ];
-    };
+    security.acme.certs."cacti.dev".extraDomainNames = [
+      "oxbow.cacti.dev"
+    ];
 
     services.nginx = {
       enable = true;

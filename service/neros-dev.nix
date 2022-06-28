@@ -29,11 +29,6 @@ in
     # Expose the HTTP and HTTPS ports to the public internet
     networking.firewall.allowedTCPPorts = [ 80 443 ];
 
-    security.acme = {
-      acceptTerms = true;
-      defaults.email = "soren@neros.dev";
-    };
-
     services.nginx = {
       enable = true;
 
