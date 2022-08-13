@@ -84,7 +84,7 @@
       };
 
       secret = {
-        inherit (secrets.nixosModules.secret) grafana hatysa oxbow pomocop tailscale neros-dev;
+        inherit (secrets.nixosModules.secret) datadog grafana hatysa oxbow pomocop tailscale neros-dev;
       };
 
       service = {
@@ -104,6 +104,7 @@
         tarazed = import ./service/tarazed.nix;
 
         # Monitoring
+        datadog = import ./service/datadog.nix;
         grafana = import ./service/grafana.nix;
         loki = import ./service/loki.nix;
         prometheus = import ./service/prometheus.nix;
@@ -190,6 +191,10 @@
               pomocop.enable = true;
 
               # Monitoring
+              datadog = {
+                enable = true;
+                hostname = "taygeta";
+              };
               grafana.enable = true;
               loki.enable = true;
               prometheus = {

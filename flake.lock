@@ -320,11 +320,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1656007320,
-        "narHash": "sha256-RFvumHI6mnV4cq+8PY04MHXK4+TXiL3lms7KykQAJss=",
+        "lastModified": 1658611559,
+        "narHash": "sha256-PM9CViEHT24FYNWoXhgD1Mx7Z+rEM1tz4NcZJhS7sCw=",
         "ref": "main",
-        "rev": "bf4632f686bb268dc79d3244f478c0246bde3a05",
-        "revCount": 31,
+        "rev": "29091ec899ec32b5727ba612307c58cd8ce9c942",
+        "revCount": 32,
         "type": "git",
         "url": "ssh://git@github.com/nerosnm/secrets.git"
       },
