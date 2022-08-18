@@ -13,7 +13,7 @@ in
   ];
 
   networking = {
-    hostName = "syrma";
+    hostName = "beez";
 
     useDHCP = false;
     interfaces.ens3.useDHCP = true;

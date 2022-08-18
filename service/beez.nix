@@ -6,12 +6,12 @@
 
 with lib;
 let
-  cfg = config.cacti.services.syrma;
+  cfg = config.cacti.services.beez;
 in
 {
   options = {
-    cacti.services.syrma = {
-      enable = mkEnableOption "Activate the Syrma Minecraft server on this host";
+    cacti.services.beez = {
+      enable = mkEnableOption "Activate the Beez Minecraft server on this host";
 
       port = mkOption {
         description = ''
@@ -46,30 +46,30 @@ in
     assertions = [
       {
         assertion = config.cacti.services.enable;
-        message = "Cacti services must be enabled to run Syrma";
+        message = "Cacti services must be enabled to run Beez";
       }
     ];
 
     users.users.minecraft = {
-      description = "Syrma Minecraft server service user";
-      home = "/srv/cacti/syrma";
+      description = "Beez Minecraft server service user";
+      home = "/srv/cacti/beez";
       createHome = true;
       isSystemUser = true;
       group = "cacti";
       extraGroups = [ "keys" ];
     };
 
-    systemd.services.syrma = {
-      description = "Syrma Minecraft Server Service";
+    systemd.services.beez = {
+      description = "Beez Minecraft Server Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.jre8}/bin/java -Xms${toString cfg.memory}M -Xmx${toString cfg.memory}M -jar forge-1.16.5-36.2.9.jar nogui";
+        ExecStart = "${pkgs.jdk}/bin/java -Xms${toString cfg.memory}M -Xmx${toString cfg.memory}M @libraries/net/minecraftforge/forge/1.18.2-40.1.27/unix_args.txt nogui";
         Restart = "always";
-        RuntimeMaxSec = 86400; # 1 day
+        # RuntimeMaxSec = 86400; # 1 day
         User = "minecraft";
-        WorkingDirectory = "/srv/cacti/syrma";
+        WorkingDirectory = "/srv/cacti/beez";
       };
     };
 

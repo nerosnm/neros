@@ -98,9 +98,9 @@
         pomocop = import ./service/pomocop.nix;
 
         # Minecraft servers
+        beez = import ./service/beez.nix;
         marsic = import ./service/marsic.nix;
         megrez = import ./service/megrez.nix;
-        syrma = import ./service/syrma.nix;
         tarazed = import ./service/tarazed.nix;
 
         # Monitoring
@@ -237,7 +237,7 @@
           };
         };
 
-        syrma = { config, ... }: {
+        beez = { config, ... }: {
           config.cacti = {
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHS3fcwk5DX94CnOKg0nJrYaQJNKHEkssGocGjiII5Zq root@nixos";
 
@@ -247,9 +247,9 @@
               enable = true;
 
               # Minecraft server
-              syrma = {
-                enable = false;
-                memory = 3072;
+              beez = {
+                enable = true;
+                memory = 5376;
               };
 
               # Monitoring
@@ -259,7 +259,7 @@
               tailscale = {
                 enable = true;
                 trustInterface = true;
-                authKey = config.nerosnm.secrets.tailscale.syrma;
+                authKey = config.nerosnm.secrets.tailscale.beez;
               };
             };
           };
@@ -325,7 +325,7 @@
         nodes = nodes [
           "taygeta"
           "marsic"
-          "syrma"
+          "beez"
           "megrez"
           "tarazed"
         ];

@@ -72,9 +72,9 @@ in
               };
             }
             {
-              targets = [ "syrma:${toString cfg.nodeExporter.port}" ];
+              targets = [ "beez:${toString cfg.nodeExporter.port}" ];
               labels = {
-                host = "syrma";
+                host = "beez";
               };
             }
             {
@@ -98,12 +98,6 @@ in
               targets = [ "marsic:9225" ];
               labels = {
                 server_name = "marsic";
-              };
-            }
-            {
-              targets = [ "syrma:19565" ];
-              labels = {
-                server_name = "syrma";
               };
             }
           ];
