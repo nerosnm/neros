@@ -5,9 +5,13 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     utils.url = "github:numtide/flake-utils";
 
+    flake-compat.url = "github:edolstra/flake-compat";
+    flake-compat.flake = false;
+
     deploy-rs.url = "github:serokell/deploy-rs";
     deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
     deploy-rs.inputs.utils.follows = "utils";
+    deploy-rs.inputs.flake-compat.follows = "flake-compat";
 
     secrets.url = "git+ssh://git@github.com/nerosnm/secrets.git?ref=main";
     secrets.inputs.nixpkgs.follows = "nixpkgs";
@@ -17,15 +21,20 @@
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.inputs.flake-utils.follows = "utils";
 
+    naersk.url = "github:nix-community/naersk";
+    naersk.inputs.nixpkgs.follows = "nixpkgs";
+
     hatysa.url = "github:nerosnm/hatysa/master";
     hatysa.inputs.nixpkgs.follows = "nixpkgs";
     hatysa.inputs.flake-utils.follows = "utils";
     hatysa.inputs.rust-overlay.follows = "rust-overlay";
+    hatysa.inputs.naersk.follows = "naersk";
 
     oxbow.url = "github:nerosnm/oxbow/main";
     oxbow.inputs.nixpkgs.follows = "nixpkgs";
     oxbow.inputs.flake-utils.follows = "utils";
     oxbow.inputs.rust-overlay.follows = "rust-overlay";
+    oxbow.inputs.naersk.follows = "naersk";
 
     pomocop.url = "github:nerosnm/pomocop/main";
     pomocop.inputs.nixpkgs.follows = "nixpkgs";
@@ -40,6 +49,7 @@
     neros-dev.url = "git+ssh://git@github.com/nerosnm/neros.dev.git?ref=main";
     neros-dev.inputs.nixpkgs.follows = "nixpkgs";
     neros-dev.inputs.flake-utils.follows = "utils";
+    neros-dev.inputs.flake-compat.follows = "flake-compat";
     neros-dev.inputs.rust-overlay.follows = "rust-overlay";
   };
 
