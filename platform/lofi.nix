@@ -13,7 +13,7 @@ in
   ];
 
   networking = {
-    hostName = "tarazed";
+    hostName = "lofi";
 
     useDHCP = false;
     interfaces.ens3.useDHCP = true;

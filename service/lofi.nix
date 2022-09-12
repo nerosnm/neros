@@ -6,12 +6,12 @@
 
 with lib;
 let
-  cfg = config.cacti.services.tarazed;
+  cfg = config.cacti.services.lofi;
 in
 {
   options = {
-    cacti.services.tarazed = {
-      enable = mkEnableOption "Activate the Tarazed Minecraft server on this host";
+    cacti.services.lofi = {
+      enable = mkEnableOption "Activate the Lofi Minecraft server on this host";
 
       port = mkOption {
         description = ''
@@ -46,29 +46,29 @@ in
     assertions = [
       {
         assertion = config.cacti.services.enable;
-        message = "Cacti services must be enabled to run Tarazed";
+        message = "Cacti services must be enabled to run Lofi";
       }
     ];
 
     users.users.minecraft = {
-      description = "Tarazed Minecraft server service user";
-      home = "/srv/cacti/tarazed";
+      description = "Lofi Minecraft server service user";
+      home = "/srv/cacti/lofi";
       createHome = true;
       isSystemUser = true;
       group = "cacti";
       extraGroups = [ "keys" ];
     };
 
-    systemd.services.tarazed = {
-      description = "Tarazed Minecraft Server Service";
+    systemd.services.lofi = {
+      description = "Lofi Minecraft Server Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.jdk}/bin/java -Xms${toString cfg.memory}M -Xmx${toString cfg.memory}M @libraries/net/minecraftforge/forge/1.18.2-40.1.31/unix_args.txt nogui";
+        ExecStart = "${pkgs.jdk}/bin/java -Xms${toString cfg.memory}M -Xmx${toString cfg.memory}M @libraries/net/minecraftforge/forge/1.18.2-40.1.76/unix_args.txt nogui";
         Restart = "always";
         User = "minecraft";
-        WorkingDirectory = "/srv/cacti/tarazed";
+        WorkingDirectory = "/srv/cacti/lofi";
       };
     };
 

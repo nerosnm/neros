@@ -84,9 +84,9 @@ in
               };
             }
             {
-              targets = [ "tarazed:${toString cfg.nodeExporter.port}" ];
+              targets = [ "lofi:${toString cfg.nodeExporter.port}" ];
               labels = {
-                host = "tarazed";
+                host = "lofi";
               };
             }
           ];

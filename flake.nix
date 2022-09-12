@@ -99,9 +99,9 @@
 
         # Minecraft servers
         beez = import ./service/beez.nix;
+        lofi = import ./service/lofi.nix;
         marsic = import ./service/marsic.nix;
         megrez = import ./service/megrez.nix;
-        tarazed = import ./service/tarazed.nix;
 
         # Monitoring
         grafana = import ./service/grafana.nix;
@@ -293,7 +293,7 @@
           };
         };
 
-        tarazed = { config, ... }: {
+        lofi = { config, ... }: {
           config.cacti = {
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPD6d0Ydn2bs6XfSUuB8RWfaqfKw6mIgjHNdZPYXjX21 root@nixos";
 
@@ -302,7 +302,7 @@
             services = {
               enable = true;
 
-              tarazed = {
+              lofi = {
                 enable = true;
                 memory = 5120;
               };
@@ -327,7 +327,7 @@
           "marsic"
           "beez"
           "megrez"
-          "tarazed"
+          "lofi"
         ];
         sshUser = "root";
       };
