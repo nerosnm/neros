@@ -197,7 +197,7 @@
               # Custom software
               hatysa.enable = true;
               oxbow.enable = true;
-              pomocop.enable = true;
+              pomocop.enable = false;
 
               # Monitoring
               grafana.enable = true;
