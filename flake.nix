@@ -127,6 +127,9 @@
 
         # Networking
         tailscale = import ./service/tailscale.nix;
+
+        # IRC
+        pounce = import ./service/pounce.nix;
       };
 
       trait = {
@@ -221,6 +224,9 @@
                 trustInterface = true;
                 authKey = config.nerosnm.secrets.tailscale.taygeta;
               };
+
+              # IRC
+              pounce.enable = true;
             };
           };
         };
