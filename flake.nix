@@ -17,6 +17,9 @@
     secrets.inputs.nixpkgs.follows = "nixpkgs";
     secrets.inputs.flake-utils.follows = "utils";
 
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
+
     rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.inputs.flake-utils.follows = "utils";
@@ -59,6 +62,7 @@
     , utils
     , deploy-rs
     , secrets
+    , agenix
     , rust-overlay
     , ...
     } @ inputs:
@@ -90,6 +94,8 @@
 
             tempo = final.callPackage ./pkgs/tempo { };
           })
+
+          agenix.overlay
         ];
       };
 
@@ -148,6 +154,7 @@
           modules = baseModules ++ [
             ./platform/${hostname}.nix
             config
+            agenix.nixosModules.age
           ];
         };
 
@@ -349,6 +356,7 @@
     {
       devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
+          agenix.packages.${system}.agenix
           deploy-rs.packages.${system}.default
           mcrcon
           nixpkgs-fmt
