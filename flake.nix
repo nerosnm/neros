@@ -192,41 +192,68 @@
     {
       nixosConfigurations = servers {
         taygeta = { config, ... }: {
-          config.cacti = {
-            key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKnAKrUqhfVaoAbhAJutnAsXwrKfPfmBPI19AuYkSbBY root@taygeta";
+          config = {
+            age.secrets."pounce-auth.pem" = {
+              file = ./secrets/pounce-auth.pem.age;
+              owner = "pounce";
+              group = "pounce";
+            };
 
-            acme.enable = true;
+            age.secrets."pounce-client.pem" = {
+              file = ./secrets/pounce-client.pem.age;
+              owner = "pounce";
+              group = "pounce";
+            };
 
-            services = {
-              enable = true;
+            cacti = {
+              key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKnAKrUqhfVaoAbhAJutnAsXwrKfPfmBPI19AuYkSbBY root@taygeta";
 
-              # Websites
-              cacti-dev.enable = true;
-              neros-dev.enable = true;
+              acme.enable = true;
 
-              # Custom software
-              hatysa.enable = true;
-              oxbow.enable = true;
-              pomocop.enable = false;
-
-              # Monitoring
-              grafana.enable = true;
-              loki.enable = true;
-              prometheus = {
+              services = {
                 enable = true;
-                nodeExporter.enable = true;
-              };
-              tempo.enable = true;
 
-              # Networking
-              tailscale = {
-                enable = true;
-                trustInterface = true;
-                authKey = config.nerosnm.secrets.tailscale.taygeta;
-              };
+                # Websites
+                cacti-dev.enable = true;
+                neros-dev.enable = true;
 
-              # IRC
-              pounce.enable = true;
+                # Custom software
+                hatysa.enable = true;
+                oxbow.enable = true;
+                pomocop.enable = false;
+
+                # Monitoring
+                grafana.enable = true;
+                loki.enable = true;
+                prometheus = {
+                  enable = true;
+                  nodeExporter.enable = true;
+                };
+                tempo.enable = true;
+
+                # Networking
+                tailscale = {
+                  enable = true;
+                  trustInterface = true;
+                  authKey = config.nerosnm.secrets.tailscale.taygeta;
+                };
+
+                # IRC
+                pounce = {
+                  enable = true;
+                  local-ca = config.age.secrets."pounce-auth.pem".path;
+
+                  instances = {
+                    libera = {
+                      local-host = "libera.cacti.dev";
+                      remote-host = "irc.eu.libera.chat";
+                      client-cert = config.age.secrets."pounce-client.pem".path;
+                      nick = "nerosnm";
+                      real = "søren";
+                    };
+                  };
+                };
+              };
             };
           };
         };

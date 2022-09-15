@@ -7,51 +7,94 @@
 with lib;
 let
   cfg = config.cacti.services.pounce;
+
+  server = types.submodule {
+    options = {
+      local-host = mkOption {
+        type = types.str;
+        description = "Host that this bouncer is hosted on";
+      };
+      remote-host = mkOption {
+        type = types.str;
+        description = "Host that this bouncer connects to";
+      };
+      client-cert = mkOption {
+        type = types.path;
+        description = "Path to the client certificate used to connect to the remote host";
+      };
+      nick = mkOption {
+        type = types.str;
+        description = "IRC nickname";
+      };
+      real = mkOption {
+        type = types.str;
+        description = "IRC realname";
+      };
+    };
+  };
 in
 {
   options = {
     cacti.services.pounce = {
       enable = mkEnableOption "pounce IRC bouncer";
+
+      external-port = mkOption {
+        description = "Externally open port that clients should connect to";
+        type = types.port;
+        default = 6697;
+      };
+
+      calico-port = mkOption {
+        description = "Internal Calico port";
+        type = types.port;
+        default = 6969;
+      };
+
+      local-ca = mkOption {
+        type = types.path;
+        description = "Path to the client certificate file that clients must authenticate against";
+      };
+
+      instances = mkOption {
+        type = types.attrsOf server;
+        description = "Servers to set up bouncers for";
+        default = { };
+      };
     };
   };
 
   config =
     let
-      external-port = 6697;
-      calico-port = 6969;
+      inherit (lib.attrsets) mapAttrs' mapAttrsToList;
     in
     mkIf cfg.enable {
-      age.secrets."pounce-auth.pem" = {
-        file = ../secrets/pounce-auth.pem.age;
-        owner = "pounce";
-        group = "pounce";
+      environment.etc = (mapAttrs'
+        (name: instance: {
+          name = "xdg/pounce/${name}";
+          value = {
+            text = ''
+              local-cert = /var/lib/acme/${instance.local-host}/fullchain.pem
+              local-priv = /var/lib/acme/${instance.local-host}/key.pem
+
+              local-host = ${instance.local-host}
+              host = ${instance.remote-host}
+
+              client-cert = ${instance.client-cert}
+              client-priv = ${instance.client-cert}
+              sasl-external
+
+              nick = ${instance.nick}
+              real = ${instance.real}
+            '';
+          };
+        })
+        cfg.instances
+      ) // {
+        "xdg/pounce/defaults".text = ''
+          local-ca = ${cfg.local-ca}
+          local-path = /srv/pounce
+        '';
       };
-
-      age.secrets."pounce-client.pem" = {
-        file = ../secrets/pounce-client.pem.age;
-        owner = "pounce";
-        group = "pounce";
-      };
-
-      environment.etc."xdg/pounce/defaults".text = ''
-        local-ca = ${config.age.secrets."pounce-auth.pem".path}
-        local-path = /srv/pounce
-      '';
-
-      environment.etc."xdg/pounce/libera".text = ''
-        local-cert = /var/lib/acme/libera.cacti.dev/fullchain.pem
-        local-priv = /var/lib/acme/libera.cacti.dev/key.pem
-
-        local-host = libera.cacti.dev
-        host = irc.eu.libera.chat
-
-        client-cert = ${config.age.secrets."pounce-client.pem".path}
-        client-priv = ${config.age.secrets."pounce-client.pem".path}
-        sasl-external
-
-        nick = nerosnm
-        real = søren
-      '';
 
       users.groups.pounce = { };
       users.users.pounce = {
@@ -63,62 +106,71 @@ in
         extraGroups = [ "keys" "nginx" ];
       };
 
-      systemd.services.pounce-libera = {
-        description = "Pounce IRC Bouncer Service (Libera)";
-        wantedBy = [ "multi-user.target" ];
-        after = [
-          "network.target"
-          "acme-libera.cacti.dev.service"
-        ];
+      systemd.services = (mapAttrs'
+        (name: instance: {
+          name = "pounce-${name}";
+          value = {
+            description = "Pounce IRC Bouncer Service (${name})";
+            wantedBy = [ "multi-user.target" ];
+            after = [
+              "network.target"
+              "acme-${instance.local-host}.service"
+            ];
 
-        serviceConfig = {
-          ExecStart = "${pkgs.pounce}/bin/pounce defaults libera";
-          Restart = "always";
-          User = "pounce";
-          WorkingDirectory = "/srv/pounce";
+            serviceConfig = {
+              ExecStart = "${pkgs.pounce}/bin/pounce defaults ${name}";
+              Restart = "always";
+              User = "pounce";
+              WorkingDirectory = "/srv/pounce";
+            };
+          };
+        })
+        cfg.instances
+      ) // {
+        calico = {
+          description = "Calico IRC Dispatcher";
+          wantedBy = [ "multi-user.target" ];
+          after = mapAttrsToList
+            (name: _: "pounce-${name}.service")
+            cfg.instances;
+
+          serviceConfig = {
+            ExecStart = ''
+              ${pkgs.pounce}/bin/calico \
+                -P ${toString cfg.calico-port} \
+                /srv/pounce
+            '';
+            Restart = "always";
+            User = "pounce";
+            WorkingDirectory = "/srv/pounce";
+          };
         };
       };
 
-      systemd.services.calico = {
-        description = "Calico IRC Dispatcher";
-        wantedBy = [ "multi-user.target" ];
-        after = [
-          "pounce-libera.service"
-        ];
-
-        serviceConfig = {
-          ExecStart = ''
-            ${pkgs.pounce}/bin/calico \
-              -P ${toString calico-port} \
-              /srv/pounce
-          '';
-          Restart = "no";
-          User = "pounce";
-          WorkingDirectory = "/srv/pounce";
-        };
-      };
-
-      networking.firewall.allowedTCPPorts = [ external-port ];
+      networking.firewall.allowedTCPPorts = [ cfg.external-port ];
 
       services.nginx = {
         enable = true;
         recommendedProxySettings = true;
 
-        virtualHosts = {
-          "libera.cacti.dev" = {
-            forceSSL = true;
-            enableACME = true;
-          };
-        };
+        virtualHosts = mapAttrs'
+          (_: instance: {
+            name = instance.local-host;
+            value = {
+              forceSSL = true;
+              enableACME = true;
+            };
+          })
+          cfg.instances;
 
         streamConfig = ''
           upstream calico {
-            server 127.0.0.1:${toString calico-port};
+            server 127.0.0.1:${toString cfg.calico-port};
           }
 
           server {
-            listen ${toString external-port};
-            listen [::0]:${toString external-port};
+            listen ${toString cfg.external-port};
+            listen [::0]:${toString cfg.external-port};
 
             proxy_pass calico;
           }
