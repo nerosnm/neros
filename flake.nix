@@ -363,6 +363,7 @@
       devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           agenix.packages.${system}.agenix
+          age-plugin-yubikey
           deploy-rs.packages.${system}.default
           mcrcon
           nixpkgs-fmt
