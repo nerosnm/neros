@@ -147,7 +147,7 @@ in
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ cfg.external-port ];
+      networking.firewall.allowedTCPPorts = [ 80 443 cfg.external-port ];
 
       services.nginx = {
         enable = true;
