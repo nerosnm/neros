@@ -6,12 +6,12 @@
 
 with lib;
 let
-  cfg = config.cacti.services.beez;
+  cfg = config.cacti.services.atm7;
 in
 {
   options = {
-    cacti.services.beez = {
-      enable = mkEnableOption "Activate the Beez Minecraft server on this host";
+    cacti.services.atm7 = {
+      enable = mkEnableOption "Activate the All The Mods 7 Minecraft server on this host";
 
       port = mkOption {
         description = ''
@@ -46,30 +46,30 @@ in
     assertions = [
       {
         assertion = config.cacti.services.enable;
-        message = "Cacti services must be enabled to run Beez";
+        message = "Cacti services must be enabled to run ATM7";
       }
     ];
 
     users.users.minecraft = {
-      description = "Beez Minecraft server service user";
-      home = "/srv/cacti/beez";
+      description = "All The Mods 7 Minecraft server service user";
+      home = "/srv/cacti/atm7";
       createHome = true;
       isSystemUser = true;
       group = "cacti";
       extraGroups = [ "keys" ];
     };
 
-    systemd.services.beez = {
-      description = "Beez Minecraft Server Service";
+    systemd.services.atm7 = {
+      description = "All The Mods 7 Minecraft Server Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.jdk}/bin/java -Xms${toString cfg.memory}M -Xmx${toString cfg.memory}M @libraries/net/minecraftforge/forge/1.18.2-40.1.27/unix_args.txt nogui";
+        ExecStart = "${pkgs.jdk}/bin/java @user_jvm_args.txt -Xms${toString cfg.memory}M -Xmx${toString cfg.memory}M @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.18.2-40.1.80/unix_args.txt nogui";
         Restart = "always";
         # RuntimeMaxSec = 86400; # 1 day
         User = "minecraft";
-        WorkingDirectory = "/srv/cacti/beez";
+        WorkingDirectory = "/srv/cacti/atm7";
       };
     };
 

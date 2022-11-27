@@ -114,7 +114,7 @@
         pomocop = import ./service/pomocop.nix;
 
         # Minecraft servers
-        beez = import ./service/beez.nix;
+        atm7 = import ./service/atm7.nix;
         lofi = import ./service/lofi.nix;
         marsic = import ./service/marsic.nix;
         megrez = import ./service/megrez.nix;
@@ -287,7 +287,7 @@
           };
         };
 
-        beez = { config, ... }: {
+        atm7 = { config, ... }: {
           config.cacti = {
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHS3fcwk5DX94CnOKg0nJrYaQJNKHEkssGocGjiII5Zq root@nixos";
 
@@ -297,9 +297,9 @@
               enable = true;
 
               # Minecraft server
-              beez = {
+              atm7 = {
                 enable = true;
-                memory = 5376;
+                memory = 5632;
               };
 
               # Monitoring
@@ -373,11 +373,11 @@
 
       deploy = {
         nodes = nodes [
-          "taygeta"
-          "marsic"
-          "beez"
-          "megrez"
+          "atm7"
           "lofi"
+          "marsic"
+          "megrez"
+          "taygeta"
         ];
         sshUser = "root";
       };

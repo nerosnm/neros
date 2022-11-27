@@ -13,7 +13,7 @@ in
   ];
 
   networking = {
-    hostName = "beez";
+    hostName = "atm7";
 
     useDHCP = false;
     interfaces.ens3.useDHCP = true;

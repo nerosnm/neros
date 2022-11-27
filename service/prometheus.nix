@@ -72,9 +72,9 @@ in
               };
             }
             {
-              targets = [ "beez:${toString cfg.nodeExporter.port}" ];
+              targets = [ "atm7:${toString cfg.nodeExporter.port}" ];
               labels = {
-                host = "beez";
+                host = "atm7";
               };
             }
             {
