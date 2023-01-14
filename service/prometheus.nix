@@ -72,12 +72,6 @@ in
               };
             }
             {
-              targets = [ "atm7:${toString cfg.nodeExporter.port}" ];
-              labels = {
-                host = "atm7";
-              };
-            }
-            {
               targets = [ "megrez:${toString cfg.nodeExporter.port}" ];
               labels = {
                 host = "megrez";
