@@ -140,6 +140,9 @@
 
         # Allows the creation of secrets encrypted with a server's host key.
         secrets = import ./trait/secrets.nix;
+
+        # Installs some useful tools for working with servers through SSH.
+        tools = import ./trait/tools.nix;
       };
 
       # Gather all the secrets, services and traits together in a list, so they 
@@ -208,6 +211,7 @@
               key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKnAKrUqhfVaoAbhAJutnAsXwrKfPfmBPI19AuYkSbBY root@taygeta";
 
               acme.enable = true;
+              tools.enable = true;
 
               services = {
                 enable = true;
@@ -263,6 +267,7 @@
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFv+FfTb6+8dFM2NSubKP6O6xKQg69tZqjBRNBlCSRXg root@nixos";
 
             acme.enable = true;
+            tools.enable = true;
 
             services = {
               enable = true;
@@ -292,6 +297,7 @@
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH3+XtOM9xdAtGw7m/uhvIpqR2S4XZosxXK3laL1Djkx root@nixos";
 
             acme.enable = true;
+            tools.enable = true;
 
             services = {
               enable = true;
@@ -320,6 +326,7 @@
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPD6d0Ydn2bs6XfSUuB8RWfaqfKw6mIgjHNdZPYXjX21 root@nixos";
 
             acme.enable = true;
+            tools.enable = true;
 
             services = {
               enable = true;
