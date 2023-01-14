@@ -247,6 +247,7 @@
                     libera = {
                       local-host = "libera.cacti.dev";
                       remote-host = "irc.eu.libera.chat";
+                      acme-host = "cacti.dev";
                       client-cert = config.age.secrets."pounce-client.pem".path;
                       nick = "nerosnm";
                       real = "søren";

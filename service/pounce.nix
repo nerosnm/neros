@@ -18,6 +18,10 @@ let
         type = types.str;
         description = "Host that this bouncer connects to";
       };
+      acme-host = mkOption {
+        type = types.str;
+        description = "ACME host to use";
+      };
       client-cert = mkOption {
         type = types.path;
         description = "Path to the client certificate used to connect to the remote host";
@@ -66,6 +70,7 @@ in
   config =
     let
       inherit (lib.attrsets) mapAttrs' mapAttrsToList;
+      inherit (lib.modules) mkMerge;
     in
     mkIf cfg.enable {
       environment.etc = (mapAttrs'
@@ -114,7 +119,7 @@ in
             wantedBy = [ "multi-user.target" ];
             after = [
               "network.target"
-              "acme-${instance.local-host}.service"
+              "acme-${instance.acme-host}.service"
             ];
 
             serviceConfig = {
@@ -153,15 +158,24 @@ in
         enable = true;
         recommendedProxySettings = true;
 
-        virtualHosts = mapAttrs'
+        virtualHosts = (mapAttrs'
           (_: instance: {
             name = instance.local-host;
             value = {
               forceSSL = true;
-              enableACME = true;
+              useACMEHost = instance.acme-host;
             };
           })
-          cfg.instances;
+          cfg.instances
+        ) // (mapAttrs'
+          (_: instance: {
+            name = instance.acme-host;
+            value = {
+              enableACME = true;
+              forceSSL = true;
+            };
+          })
+          cfg.instances);
 
         streamConfig = ''
           upstream calico {
@@ -176,5 +190,13 @@ in
           }
         '';
       };
+
+      security.acme.certs = mkMerge (mapAttrsToList
+        (_: instance: {
+          "${instance.acme-host}" = {
+            extraDomainNames = [ instance.local-host ];
+          };
+        })
+        cfg.instances);
     };
 }
