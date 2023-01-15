@@ -66,12 +66,6 @@ in
               };
             }
             {
-              targets = [ "marsic:${toString cfg.nodeExporter.port}" ];
-              labels = {
-                host = "marsic";
-              };
-            }
-            {
               targets = [ "megrez:${toString cfg.nodeExporter.port}" ];
               labels = {
                 host = "megrez";
@@ -81,17 +75,6 @@ in
               targets = [ "lofi:${toString cfg.nodeExporter.port}" ];
               labels = {
                 host = "lofi";
-              };
-            }
-          ];
-        }
-        {
-          job_name = "minecraft";
-          static_configs = [
-            {
-              targets = [ "marsic:9225" ];
-              labels = {
-                server_name = "marsic";
               };
             }
           ];

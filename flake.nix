@@ -262,36 +262,6 @@
           };
         };
 
-        marsic = { config, ... }: {
-          config.cacti = {
-            key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFv+FfTb6+8dFM2NSubKP6O6xKQg69tZqjBRNBlCSRXg root@nixos";
-
-            acme.enable = true;
-            tools.enable = true;
-
-            services = {
-              enable = true;
-
-              # Minecraft server
-              marsic = {
-                enable = true;
-                memory = 5632;
-                # temp world seed was: -2857313200842167840
-              };
-
-              # Monitoring
-              prometheus.nodeExporter.enable = true;
-
-              # Networking
-              tailscale = {
-                enable = true;
-                trustInterface = true;
-                authKey = config.nerosnm.secrets.tailscale.marsic;
-              };
-            };
-          };
-        };
-
         megrez = { config, ... }: {
           config.cacti = {
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH3+XtOM9xdAtGw7m/uhvIpqR2S4XZosxXK3laL1Djkx root@nixos";
@@ -353,7 +323,6 @@
       deploy = {
         nodes = nodes [
           "lofi"
-          "marsic"
           "megrez"
           "taygeta"
         ];
