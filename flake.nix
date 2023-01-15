@@ -262,35 +262,6 @@
           };
         };
 
-        megrez = { config, ... }: {
-          config.cacti = {
-            key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH3+XtOM9xdAtGw7m/uhvIpqR2S4XZosxXK3laL1Djkx root@nixos";
-
-            acme.enable = true;
-            tools.enable = true;
-
-            services = {
-              enable = true;
-
-              # Minecraft server
-              megrez = {
-                enable = true;
-                memory = 5632;
-              };
-
-              # Monitoring
-              prometheus.nodeExporter.enable = true;
-
-              # Networking
-              tailscale = {
-                enable = true;
-                trustInterface = true;
-                authKey = config.nerosnm.secrets.tailscale.megrez;
-              };
-            };
-          };
-        };
-
         lofi = { config, ... }: {
           config.cacti = {
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPD6d0Ydn2bs6XfSUuB8RWfaqfKw6mIgjHNdZPYXjX21 root@nixos";
@@ -323,7 +294,6 @@
       deploy = {
         nodes = nodes [
           "lofi"
-          "megrez"
           "taygeta"
         ];
         sshUser = "root";

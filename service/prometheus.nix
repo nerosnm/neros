@@ -66,12 +66,6 @@ in
               };
             }
             {
-              targets = [ "megrez:${toString cfg.nodeExporter.port}" ];
-              labels = {
-                host = "megrez";
-              };
-            }
-            {
               targets = [ "lofi:${toString cfg.nodeExporter.port}" ];
               labels = {
                 host = "lofi";
