@@ -28,10 +28,6 @@
     naersk.inputs.nixpkgs.follows = "nixpkgs";
 
     hatysa.url = "github:nerosnm/hatysa/master";
-    hatysa.inputs.nixpkgs.follows = "nixpkgs";
-    hatysa.inputs.flake-utils.follows = "utils";
-    hatysa.inputs.rust-overlay.follows = "rust-overlay";
-    hatysa.inputs.naersk.follows = "naersk";
 
     oxbow.url = "github:nerosnm/oxbow/main";
     oxbow.inputs.nixpkgs.follows = "nixpkgs";
@@ -47,7 +43,6 @@
     cacti-dev.url = "github:nerosnm/cacti.dev/main";
     cacti-dev.inputs.nixpkgs.follows = "nixpkgs";
     cacti-dev.inputs.flake-utils.follows = "utils";
-    cacti-dev.inputs.rust-overlay.follows = "rust-overlay";
 
     neros-dev.url = "git+ssh://git@github.com/nerosnm/neros.dev.git?ref=main";
     neros-dev.inputs.nixpkgs.follows = "nixpkgs";
@@ -63,7 +58,6 @@
     , deploy-rs
     , secrets
     , agenix
-    , rust-overlay
     , ...
     } @ inputs:
     let
