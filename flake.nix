@@ -101,6 +101,7 @@
         # Websites
         cacti-dev = import ./service/cacti-dev.nix;
         neros-dev = import ./service/neros-dev.nix;
+        gemmat-dev-redirect = import ./service/gemmat-dev-redirect.nix;
 
         # Custom software
         hatysa = import ./service/hatysa.nix;
@@ -213,6 +214,7 @@
                 # Websites
                 cacti-dev.enable = true;
                 neros-dev.enable = true;
+                gemmat-dev-redirect.enable = true;
 
                 # Custom software
                 hatysa.enable = true;
